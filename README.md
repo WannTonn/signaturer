@@ -3,7 +3,7 @@
 - 项目由create-react-app  [Create React App](https://github.com/facebook/create-react-app) 创建， 由react-cropper + react 为基础编写。
 
 ## Live Demo
-待完善
+- [Click Me](https://blogs.wanntonn.fun/signaturer/)
 ## Docs
 - [react-cropper](https://github.com/react-cropper/react-cropper)
 
