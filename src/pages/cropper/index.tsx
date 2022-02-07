@@ -1,26 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useObserver } from 'mobx-react';
 import { Slider, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import Cropper from 'react-cropper';
-import getCleanImg, {downloadImg} from './imgUtil';
+import getCleanImg, { downloadImg } from './imgUtil';
 // import Base64Tester from '@/components/testBase64Url';
 import "cropperjs/dist/cropper.css";
 import './style.scss';
-const defaultImgUrl = 'https://blogs.wanntonn.fun/images/_header.jpg';
+// const defaultImgUrl = 'https://blogs.wanntonn.fun/images/_header.jpg';
+import defaultImgUrl from './static/sign.jpeg';
 const CropperComponent = () => {
   const [image, setImage] = useState(defaultImgUrl);
   const [cropData, setCropData] = useState('');
   const [cropper, setCropper] = useState<any>();
   const [fileList, setFileList] = useState<any>([]);
+  const [cropping, setCropping] = useState(false);
+  useEffect(() => {
+    if (cropData) {setCropping(false); message.destroy()};
+  }, [cropData])
   /**
    * @description 开始裁剪
    * @param isSignature 是否是制作签名
     */
   const handleCrop = (isSignature: boolean = false) => {
     if (cropper) {
+      message.loading('正在制作中，请耐心等候...', 0)
+      setCropping(true);
       let croppedImgCanvasData = cropper.getCroppedCanvas();
       getCleanImgData(croppedImgCanvasData, isSignature);
+
     }
   }
   /**
@@ -59,8 +67,6 @@ const CropperComponent = () => {
     let { width, height } = canvasItem;
     let context = canvasItem.getContext('2d');
     let imgData = context.getImageData(0, 0, width, height);
-
-    console.log('imgData', imgData);
     for (let i = 0; i < imgData.data.length; i += 4) {
       r = imgData.data[i];
       g = imgData.data[i + 1];
@@ -100,13 +106,13 @@ const CropperComponent = () => {
    * @description 将成品图片下载
    * 
     */
-   const handleDownLoad = async () => {
-     if (!cropData) {
-       message.error('成品区空空如也，请先制作成品');
-       return;
-     };
-     await downloadImg(cropData, '签名.png');
-   }
+  const handleDownLoad = async () => {
+    if (!cropData) {
+      message.error('成品区空空如也，请先制作成品');
+      return;
+    };
+    await downloadImg(cropData, '签名.png');
+  }
   return useObserver(() => (
     <div className='cropperWrapper'>
       <div className="title">Signaturer</div>
@@ -134,10 +140,10 @@ const CropperComponent = () => {
         <p className="title">拖动滚动条调整角度：</p>
         <Slider style={{ width: '200px', display: 'inline-block' }} max={360} onChange={(deg) => (cropper.rotateTo(deg))}></Slider>
         <Upload
+          disabled={cropping}
           accept='image/png,image/jpg,image/jpeg'
           beforeUpload={(file) => {
             setFileList([...fileList, file]);
-            console.log(file, 'file');
             const reader = new FileReader();
             reader.onload = () => {
               setImage(reader.result as any);
@@ -146,11 +152,11 @@ const CropperComponent = () => {
             return false;
           }}
         >
-          <Button icon={<UploadOutlined />}>选择签名图</Button>
+          <Button disabled={cropping} icon={<UploadOutlined />}>选择签名图</Button>
         </Upload>
-        <Button className='opt-btn' onClick={() => handleCrop()}>制作普通裁剪</Button>
-        <Button className='opt-btn' onClick={() => handleCrop(true)}>制作透底签名</Button>
-        <Button className='opt-btn' onClick={() => handleDownLoad()}>下载成品图</Button>
+        <Button className='opt-btn' disabled={cropping} onClick={() => handleCrop()}>制作普通裁剪</Button>
+        <Button className='opt-btn' disabled={cropping} onClick={() => handleCrop(true)}>制作透底签名</Button>
+        <Button className='opt-btn' disabled={cropping} onClick={() => handleDownLoad()}>下载成品图</Button>
       </div>
       <div className='operateWrapper'>
         <div className='previewWrapper'>

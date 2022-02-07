@@ -1,5 +1,5 @@
 import React from 'react';
-import Cropper from '@/pages/cropper';
+import Cropper from './pages/cropper';
 import './App.css';
 
 function App() {

@@ -85,7 +85,6 @@ async function transformSignatureImage(img, rawImgBaseData) {
     height: img.height,
   });
   const ctx = canvas.getContext("2d");
-  console.log(img);
   // const imageData = ctx.getImageData(0, 0, img.width, img.height);
   const imageData = img;
   let image = new Image(img.width, img.height);
@@ -133,7 +132,5 @@ export async function downloadImg(url, fileName) {
   window.URL.revokeObjectURL(url_1);
 }
 export default function getCleanImg(img, rawImgBaseData) {
-  console.log('canvasObject', img);
-  console.log('rawImgBaseData', rawImgBaseData);
   return transformSignatureImage(img, rawImgBaseData);
 }
