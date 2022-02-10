@@ -53,5 +53,5 @@
     "sass": "^1.49.7",
     "sass-loader": "^12.4.0"
   },
-  "homepage": "."
+  "homepage": "./signaturer/"
 }
