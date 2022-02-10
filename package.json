@@ -1,5 +1,5 @@
 {
-  "name": "sggg",
+  "name": "signaturer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -52,5 +52,6 @@
     "react-app-rewired": "^2.1.11",
     "sass": "^1.49.7",
     "sass-loader": "^12.4.0"
-  }
+  },
+  "homepage": "."
 }
